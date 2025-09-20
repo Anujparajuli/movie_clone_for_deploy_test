@@ -3,18 +3,18 @@ import dj_database_url
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECRET_KEY
 # Use environment variable if set (on Render), else fallback for local dev
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-local-fallback-key-1234567890')
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # DEBUG
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
 # ALLOWED_HOSTS
 # Use environment variable if set, else allow localhost for dev
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '127.0.0.1 localhost movie_clone_for_deploy_test-1.onrender.com').split(' ')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(' ')
 
 # Application definition
 INSTALLED_APPS = [
@@ -64,8 +64,8 @@ WSGI_APPLICATION = 'TrackTV.wsgi.application'
 DATABASES = {
     "default": dj_database_url.parse(
         os.environ.get(
-            "DATABASE_URL",
-            f"sqlite:///{os.path.join(BASE_DIR, 'db.sqlite3')}"
+            'DATABASE_URL',
+            f"sqlite:///{os.path.join(BASE_DIR, 'db.sqlite3')}"  # fallback
         )
     )
 }
