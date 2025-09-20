@@ -6,15 +6,13 @@ from pathlib import Path
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECRET_KEY
-# Use environment variable if set (on Render), else fallback for local dev
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # DEBUG
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
-# ALLOWED_HOSTS
-# Use environment variable if set, else allow localhost for dev
-ALLOWED_HOSTS = [host.strip() for host in os.environ.get('ALLOWED_HOSTS', '').split() if host]
+# ALLOWED_HOSTS (read from Render env var, fallback to localhost)
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
 
 # Application definition
 INSTALLED_APPS = [
@@ -60,12 +58,11 @@ TEMPLATES = [
 WSGI_APPLICATION = 'TrackTV.wsgi.application'
 
 # Database
-# Use DATABASE_URL from Render if set, else fallback to local SQLite
 DATABASES = {
     "default": dj_database_url.parse(
         os.environ.get(
-            'DATABASE_URL',
-            f"sqlite:///{os.path.join(BASE_DIR, 'db.sqlite3')}"  # fallback
+            "DATABASE_URL",
+            f"sqlite:///{os.path.join(BASE_DIR, 'db.sqlite3')}"
         )
     )
 }
@@ -87,13 +84,11 @@ USE_TZ = True
 
 # Static files
 STATIC_URL = '/static/'
-
-# Collect static files to a folder Render can serve
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Extra settings for crispy forms
+# Crispy forms
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-# Login redirect
+# Login
 LOGIN_REDIRECT_URL = 'tv-home'
 LOGIN_URL = '/login'
